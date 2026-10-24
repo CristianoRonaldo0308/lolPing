@@ -1,0 +1,9 @@
+# Deploy server relay lên Render (gói miễn phí): New → Blueprint → chọn repo này.
+services:
+  - type: web
+    name: lolping-relay
+    runtime: docker
+    plan: free
+    dockerfilePath: ./src/LolPing.Relay/Dockerfile
+    dockerContext: ./src/LolPing.Relay
+    healthCheckPath: /

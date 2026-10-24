@@ -1,0 +1,274 @@
+<Window x:Class="LolPing.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:LolPing.Core"
+        xmlns:ui="clr-namespace:LolPing.UI"
+        Title="lolPing" Width="1240" Height="880" MinWidth="1040" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBrush}"
+        Foreground="{StaticResource TextBrush}"
+        Icon="/Assets/app.ico"
+        FlowDirection="{Binding Flow, Source={x:Static c:Loc.I}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ───────── Thanh bên ───────── -->
+        <DockPanel Margin="14,22,14,14">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,0,0,30">
+                <Image Source="{x:Static c:Icons.Logo}" Width="54" Height="54"/>
+                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="lolPing" FontSize="25" FontWeight="SemiBold"/>
+                    <TextBlock Text="{c:Tr Tagline}" Style="{StaticResource Subtext}" FontSize="14"/>
+                </StackPanel>
+            </StackPanel>
+
+            <ListBox x:Name="Nav" Style="{StaticResource NavList}" SelectionChanged="Nav_SelectionChanged">
+                <ListBoxItem Tag="SecActivation">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE7C9;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavActivation}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecToggle">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE765;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavToggle}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecSound">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE767;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavSound}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecWheel">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xEB05;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavWheel}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecEmote">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE76E;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavEmote}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecRoom">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE716;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavRoom}"/></StackPanel>
+                </ListBoxItem>
+                <ListBoxItem Tag="SecApp">
+                    <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource NavIcon}" Text="&#xE713;"/><TextBlock Style="{StaticResource NavText}" Text="{c:Tr NavApp}"/></StackPanel>
+                </ListBoxItem>
+            </ListBox>
+        </DockPanel>
+
+        <!-- ───────── Nội dung ───────── -->
+        <ScrollViewer x:Name="Scroller" Grid.Column="1" VerticalScrollBarVisibility="Auto" ScrollChanged="Scroller_ScrollChanged">
+            <StackPanel x:Name="Body" Margin="8,26,36,80">
+                <TextBlock Text="{c:Tr SettingsTitle}" FontSize="42" FontWeight="SemiBold" Margin="0,0,0,26"/>
+
+                <!-- Trạng thái -->
+                <Border Style="{StaticResource Card}" Padding="24,18">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse x:Name="StatusDot" Width="12" Height="12" Margin="20,0,24,0" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="StatusTitle" FontSize="17" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="StatusDesc" Style="{StaticResource Subtext}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="2" Style="{StaticResource Switch}" IsChecked="{Binding Enabled}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Kích hoạt -->
+                <TextBlock x:Name="SecActivation" Style="{StaticResource SectionHeader}" Text="{c:Tr NavActivation}"/>
+                <ui:SettingRow Glyph="&#xE7C9;" Header="{c:Tr TriggerKey}" Description="{c:Tr TriggerKeyDesc}">
+                    <ComboBox Width="290" SelectedValuePath="Tag" SelectedValue="{Binding TriggerKey}">
+                        <ComboBoxItem Content="Alt" Tag="{x:Static c:ModKey.Alt}"/>
+                        <ComboBoxItem Content="Win" Tag="{x:Static c:ModKey.Win}"/>
+                        <ComboBoxItem Content="Ctrl" Tag="{x:Static c:ModKey.Ctrl}"/>
+                        <ComboBoxItem Content="Shift" Tag="{x:Static c:ModKey.Shift}"/>
+                    </ComboBox>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE7C2;" Header="{c:Tr DragDistance}" Description="{c:Tr DragDistanceDesc}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="300" Minimum="2" Maximum="40" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding DragThreshold}" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource ValueText}" Text="{Binding DragThreshold, StringFormat={}{0} px}"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8B0;" Header="{c:Tr ClickToPing}" Description="{c:Tr ClickToPingDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ClickToPing}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE740;" Header="{c:Tr PauseFullscreen}" Description="{c:Tr PauseFullscreenDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding PauseInFullscreen}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8FB;" Header="{c:Tr FullscreenAllow}" x:Name="FullscreenAllowRow"
+                               IsEnabled="{Binding PauseInFullscreen}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Width="260" FontSize="14" Padding="10,6" VerticalContentAlignment="Center"
+                                 Text="{Binding FullscreenAllowList, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button x:Name="AllowLastButton" Padding="14,8" Margin="8,0,0,0" Click="AllowLast_Click"/>
+                    </StackPanel>
+                </ui:SettingRow>
+
+                <!-- Bật / tắt -->
+                <TextBlock x:Name="SecToggle" Style="{StaticResource SectionHeader}" Text="{c:Tr NavToggle}"/>
+                <ui:SettingRow Glyph="&#xE765;" Header="{c:Tr ToggleHotkey}" Description="{c:Tr ToggleHotkeyDesc}">
+                    <ui:HotkeyBox Hotkey="{Binding ToggleHotkey}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE7E8;" Header="{c:Tr StartEnabled}" Description="{c:Tr StartEnabledDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding StartEnabled}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE768;" Header="{c:Tr StartWithWindows}" Description="{c:Tr StartWithWindowsDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding StartWithWindows}"/>
+                </ui:SettingRow>
+
+                <!-- Tín hiệu & âm thanh -->
+                <TextBlock x:Name="SecSound" Style="{StaticResource SectionHeader}" Text="{c:Tr NavSound}"/>
+                <ui:SettingRow Glyph="&#xE767;" Header="{c:Tr SoundEnabled}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding SoundEnabled}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8D6;" Header="{c:Tr SoundFolder}" x:Name="SoundFolderRow">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="{c:Tr ChooseFolder}" Padding="18,8" Click="ChooseSoundFolder_Click"/>
+                        <Button x:Name="ClearSoundFolderButton" Content="{c:Tr Clear}" Padding="18,8" Margin="8,0,0,0" Click="ClearSoundFolder_Click"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xEB9F;" Header="{c:Tr IconFolder}" x:Name="IconFolderRow">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="{c:Tr ChooseFolder}" Padding="18,8" Click="ChooseIconFolder_Click"/>
+                        <Button x:Name="ClearIconFolderButton" Content="{c:Tr Clear}" Padding="18,8" Margin="8,0,0,0" Click="ClearIconFolder_Click"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE994;" Header="{c:Tr Volume}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="300" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding Volume}" VerticalAlignment="Center"
+                                IsEnabled="{Binding SoundEnabled}"/>
+                        <TextBlock Style="{StaticResource ValueText}" Text="{Binding Volume, StringFormat={}{0}%}"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8A3;" Header="{c:Tr PingSize}" Description="{c:Tr PingSizeDesc}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="300" Minimum="50" Maximum="200" TickFrequency="5" IsSnapToTickEnabled="True" Value="{Binding PingScale}" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource ValueText}" Text="{Binding PingScale, StringFormat={}{0}%}"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE916;" Header="{c:Tr PingDuration}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="300" Minimum="1" Maximum="6" TickFrequency="0.5" IsSnapToTickEnabled="True" Value="{Binding PingDuration}" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource ValueText}" Text="{Binding PingDuration, StringFormat={}{0:0.0} s}"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xEB05;" Header="{c:Tr WheelSize}">
+                    <StackPanel Orientation="Horizontal">
+                        <Slider Width="300" Minimum="60" Maximum="160" TickFrequency="5" IsSnapToTickEnabled="True" Value="{Binding WheelScale}" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource ValueText}" Text="{Binding WheelScale, StringFormat={}{0}%}"/>
+                    </StackPanel>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE768;" Header="{c:Tr TestPing}" Description="{c:Tr TestPingDesc}">
+                    <Button Content="{c:Tr TestPingButton}" Padding="18,8" Click="TestPing_Click"/>
+                </ui:SettingRow>
+
+                <!-- Vòng chọn tín hiệu -->
+                <TextBlock x:Name="SecWheel" Style="{StaticResource SectionHeader}" Text="{c:Tr NavWheel}"/>
+                <ui:WheelEditor Kind="Signal"/>
+
+                <!-- Biểu cảm -->
+                <TextBlock x:Name="SecEmote" Style="{StaticResource SectionHeader}" Text="{c:Tr NavEmote}"/>
+                <ui:SettingRow Glyph="&#xE76E;" Header="{c:Tr EmoteKey}" Description="{c:Tr EmoteKeyDesc}">
+                    <ComboBox Width="290" SelectedValuePath="Tag" SelectedValue="{Binding EmoteKey}">
+                        <ComboBoxItem Content="Alt" Tag="{x:Static c:ModKey.Alt}"/>
+                        <ComboBoxItem Content="Win" Tag="{x:Static c:ModKey.Win}"/>
+                        <ComboBoxItem Content="Ctrl" Tag="{x:Static c:ModKey.Ctrl}"/>
+                        <ComboBoxItem Content="Shift" Tag="{x:Static c:ModKey.Shift}"/>
+                    </ComboBox>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8B0;" Header="{c:Tr ClickToEmote}" Description="{c:Tr ClickToEmoteDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ClickToEmote}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE767;" Header="{c:Tr EmoteSounds}" Description="{c:Tr EmoteSoundsDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding EmoteSounds}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8D6;" Header="{c:Tr ClipsOverlap}" Description="{c:Tr ClipsOverlapDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ClipsOverlap}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE71A;" Header="{c:Tr StopSoundsHotkey}" Description="{c:Tr StopSoundsHotkeyDesc}">
+                    <ui:HotkeyBox Hotkey="{Binding StopSoundsHotkey}"/>
+                </ui:SettingRow>
+                <ui:WheelEditor Kind="Emote" Margin="0,8,0,0"/>
+
+                <!-- Phòng -->
+                <TextBlock x:Name="SecRoom" Style="{StaticResource SectionHeader}" Text="{c:Tr NavRoom}"/>
+                <!-- Chưa vào phòng: tạo hoặc nhập mã -->
+                <Border x:Name="RoomJoinCard" Style="{StaticResource Card}" Padding="24,20">
+                    <StackPanel>
+                        <TextBlock Text="{c:Tr RoomJoinTitle}" FontSize="16"/>
+                        <TextBlock Text="{c:Tr RoomJoinDesc}" Style="{StaticResource Subtext}" Margin="0,4,0,14"/>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="{c:Tr RoomCreate}" Padding="18,8" Margin="8,0,0,0" Click="CreateRoom_Click"/>
+                            <Button DockPanel.Dock="Right" Content="{c:Tr RoomJoin}" Padding="18,8" Margin="8,0,0,0" Click="JoinRoom_Click"/>
+                            <TextBox x:Name="JoinBox" FontSize="15" Padding="10,7" VerticalContentAlignment="Center" KeyDown="JoinBox_KeyDown"
+                                     ToolTip="{c:Tr RoomJoinHint}"/>
+                        </DockPanel>
+                        <TextBlock x:Name="JoinError" Foreground="#FF8A80" Margin="0,8,0,0" TextWrapping="Wrap" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Đang ở trong phòng -->
+                <Border x:Name="RoomCard" Style="{StaticResource Card}" Padding="24,20" Visibility="Collapsed">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="&#xE716;" FontFamily="{StaticResource IconFont}" FontSize="22" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock x:Name="RoomCodeText" FontFamily="Consolas" FontSize="30" FontWeight="Bold"/>
+                                <TextBlock Text="{c:Tr RoomShare}" Style="{StaticResource Subtext}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="{c:Tr RoomCopy}" Padding="18,8" Margin="0,0,8,0" Click="CopyRoom_Click"/>
+                                <Button Content="{c:Tr RoomLeave}" Padding="18,8" Click="LeaveRoom_Click"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock x:Name="RoomStatus" Style="{StaticResource Subtext}" Margin="48,16,0,10"/>
+                        <StackPanel x:Name="MemberList" Margin="48,0,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <ui:SettingRow Glyph="&#xE774;" Header="{c:Tr ServerUrl}" x:Name="ServerRow">
+                    <TextBox Width="330" FontSize="14" Padding="10,6" VerticalContentAlignment="Center"
+                             Text="{Binding ServerUrl, UpdateSourceTrigger=LostFocus}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE704;" Header="{c:Tr LanEnabled}" Description="{c:Tr LanEnabledDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding LanEnabled}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE909;" Header="{c:Tr InternetEnabled}" Description="{c:Tr InternetEnabledDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding InternetEnabled}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE767;" Header="{c:Tr RoomSounds}" Description="{c:Tr RoomSoundsDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding RoomSounds}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE72C;" Header="{c:Tr AutoRejoin}" Description="{c:Tr AutoRejoinDesc}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding AutoRejoin}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE77B;" Header="{c:Tr PlayerName}" Description="{c:Tr PlayerNameDesc}">
+                    <TextBox Width="330" FontSize="15" Padding="10,6" MaxLength="24"
+                             Text="{Binding PlayerName, UpdateSourceTrigger=PropertyChanged}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE8EC;" Header="{c:Tr ShowName}">
+                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding ShowName}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE790;" Header="{c:Tr LabelColor}">
+                    <StackPanel x:Name="Swatches" Orientation="Horizontal"/>
+                </ui:SettingRow>
+
+                <!-- Ứng dụng -->
+                <TextBlock x:Name="SecApp" Style="{StaticResource SectionHeader}" Text="{c:Tr NavApp}"/>
+                <ui:SettingRow Glyph="&#xE774;" Header="{c:Tr Language}" Description="{c:Tr LanguageDesc}">
+                    <ComboBox x:Name="LanguageCombo" Width="290" SelectedValuePath="Tag" SelectedValue="{Binding Language}"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE838;" Header="{c:Tr DataFolder}" Description="{c:Tr DataFolderDesc}">
+                    <Button Content="{c:Tr OpenFolder}" Padding="18,8" Click="OpenFolder_Click"/>
+                </ui:SettingRow>
+                <ui:SettingRow Glyph="&#xE946;" Header="{c:Tr About}" x:Name="AboutRow">
+                    <Button Content="{c:Tr QuitApp}" Padding="18,8" Click="Quit_Click"/>
+                </ui:SettingRow>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

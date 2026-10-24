@@ -1,0 +1,39 @@
+# Mỗi lần push lên main: build lolPing.exe (chạy được ngay, không cần cài .NET) và đăng lên Releases.
+# Link tải luôn trỏ tới bản mới nhất: https://github.com/<owner>/<repo>/releases/latest/download/lolPing.exe
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish lolPing.exe
+        run: >
+          dotnet publish src/LolPing/LolPing.csproj -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true -o publish
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: lolPing build ${{ github.run_number }}
+          make_latest: true
+          body: |
+            Tải **lolPing.exe** bên dưới và nhấp đúp để chạy (Windows 10/11, không cần cài thêm gì).
+            Nếu Windows SmartScreen cảnh báo: chọn *More info* → *Run anyway*.
+          files: publish/lolPing.exe

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/LolPing/LolPing.csproj" />
+  <Project Path="src/LolPing.Relay/LolPing.Relay.csproj" />
+</Solution>
